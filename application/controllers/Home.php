@@ -22,6 +22,34 @@ class Home extends CI_Controller
         $this->template->default_template($data);
     }
 
+    function user_contact(){
+        $data = $this->input->post();
+        $name = $data['name'];
+        $surname = $data['surname'];
+        $email = $data['email'];
+        $subject = $data['subject'];
+        $message = $data['message'];
+
+        
+        $insertData = $this->db->insert('contactus', array('name'=>$name, 'surname'=>$surname, 'email'=>$email, 'subject'=>$subject, 'message'=>$message, ));
+    
+        if($insertData){
+    // function send_email($templateName, $mailData)
+
+            $sendmail = send_email('subscription_template', array('to_name'=>$name, 'mailTo'=>$email, 'mailSubject'=>'Thank You For Subscribing'));
+
+           
+            $response = array('status'=>'success', 'message'=>'We Will contact you soon thanks for the feed back');
+            
+        }else{
+            $response = array('status'=>'fail', 'message'=>'Could NOt Insert');
+        }
+        echo json_encode($response);
+        return;
+        
+    }
+
+
 
 
 
